@@ -41,7 +41,8 @@ def verify_label(extracted_data, application_data):
 st.set_page_config(page_title="TTB Label Verification", layout="wide")
 st.title("Alcohol Label Verification Agent")
 st.write("Upload label images below to verify them against COLA application data.")
-uploaded_files = st.file_uploader("Upload Label Images", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
+if "uploader_key" not in st.session_state: st.session_state.uploader_key = 0
+uploaded_files = st.file_uploader("Upload Label Images", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True, key=st.session_state.uploader_key)
 mock_app_data = {"Brand Name":"Old Tom Distillery", "Class/Type":"Kentucky Straight Bourbon Whiskey"}
 if uploaded_files:
  st.write(f"Processing {len(uploaded_files)} labels...")
@@ -62,4 +63,6 @@ if uploaded_files:
     else: st.success(f"Warning Statement: Strict Match")
   st.divider()
  if st.button("Clear Results and Start Over", type="primary"):
+  st.session_state.uploader_key += 1
   st.rerun()
+
